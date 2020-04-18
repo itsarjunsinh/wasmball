@@ -9,7 +9,8 @@
         "Unity.Collections",
         "Unity.Transforms",
         "Unity.Rendering.Hybrid",
-        "Tiny3D"
+        "Tiny3D",
+        "Unity.Tiny.Input"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
