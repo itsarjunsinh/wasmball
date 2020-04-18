@@ -4,12 +4,9 @@ using Unity.Transforms;
 
 class ProjectileSpawnSystem : SystemBase
 {
-    EntityManager entityManager;
-
     protected override void OnCreate()
     {
         RequireSingletonForUpdate<ProjectilePrefab>();
-        entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
     }
 
     protected override void OnUpdate()
@@ -21,17 +18,17 @@ class ProjectileSpawnSystem : SystemBase
             if (turretData.timer <= 0f)
             {
                 turretData.timer = 3f;
-                var pfHolderEntity = GetSingletonEntity<ProjectilePrefab>();
-                var pfProjectile = GetComponent<ProjectilePrefab>(pfHolderEntity);
-                var projectile = entityManager.Instantiate(pfProjectile.Value);
+                
+                float spawnPositionX = translation.Value.x;
+                float spawnPositionY = translation.Value.y;
 
-                var x = translation.Value.x;
-                var y = translation.Value.y;
-                entityManager.SetComponentData(projectile, new Translation
+                Entity pfProjectile = GetSingleton<ProjectilePrefab>().Value;
+                Entity projectile = EntityManager.Instantiate(pfProjectile);
+                EntityManager.SetComponentData(projectile, new Translation
                 {
-                    Value = new float3(x, y, 0)
+                    Value = new float3(spawnPositionX, spawnPositionY, 0)
                 });
             }
-        }).WithStructuralChanges().WithoutBurst().Run();
+        }).WithStructuralChanges().Run();
     }
 }
