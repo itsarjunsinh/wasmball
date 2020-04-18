@@ -6,4 +6,5 @@ public struct MovementData : IComponentData {
     public float gravityRate;
     public float speed;
     public float3 direction;
+    public bool isAffectedByGravity;
 }

@@ -17,8 +17,8 @@ class ProjectileSpawnSystem : SystemBase
             turretData.timer -= deltaTime;
             if (turretData.timer <= 0f)
             {
-                turretData.timer = 3f;
-                
+                turretData.timer = 2f;
+
                 float spawnPositionX = translation.Value.x;
                 float spawnPositionY = translation.Value.y;
 
@@ -27,6 +27,13 @@ class ProjectileSpawnSystem : SystemBase
                 EntityManager.SetComponentData(projectile, new Translation
                 {
                     Value = new float3(spawnPositionX, spawnPositionY, 0)
+                });
+                EntityManager.SetComponentData(projectile, new MovementData
+                {
+                    direction = new float3(0, 0, 0),
+                    isAffectedByGravity = false,
+                    gravityRate = 1,
+                    speed = 2
                 });
             }
         }).WithStructuralChanges().Run();
