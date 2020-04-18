@@ -4,7 +4,6 @@ using Unity.Transforms;
 
 class ProjectileSpawnSystem : SystemBase
 {
-    bool spawned = false;
     EntityManager entityManager;
 
     protected override void OnCreate()
@@ -15,16 +14,24 @@ class ProjectileSpawnSystem : SystemBase
 
     protected override void OnUpdate()
     {
-        if (!spawned)
+        var deltaTime = Time.DeltaTime;
+        Entities.ForEach((ref TurretData turretData, in Translation translation) =>
         {
-            var pfHolderEntity = GetSingletonEntity<ProjectilePrefab>();
-            var pfProjectile = GetComponent<ProjectilePrefab>(pfHolderEntity);
-            var projectile = entityManager.Instantiate(pfProjectile.Value);
-            entityManager.SetComponentData(projectile, new Translation
+            turretData.timer -= deltaTime;
+            if (turretData.timer <= 0f)
             {
-                Value = new float3(0, 0, 0)
-            });
-            spawned = true;
-        }
+                turretData.timer = 3f;
+                var pfHolderEntity = GetSingletonEntity<ProjectilePrefab>();
+                var pfProjectile = GetComponent<ProjectilePrefab>(pfHolderEntity);
+                var projectile = entityManager.Instantiate(pfProjectile.Value);
+
+                var x = translation.Value.x;
+                var y = translation.Value.y;
+                entityManager.SetComponentData(projectile, new Translation
+                {
+                    Value = new float3(x, y, 0)
+                });
+            }
+        }).WithStructuralChanges().WithoutBurst().Run();
     }
 }
