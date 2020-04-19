@@ -20,6 +20,8 @@ public class MovementSystem : SystemBase
                     if (translation.Value.y > 7) // Hardcoded value of Min height
                     {
                         moveData.direction.y += moveData.gravityRate * deltaTime;
+                    } else {
+                        moveData.direction.y += 1;
                     }
                 }
                 translation.Value += (moveData.direction - translation.Value) * (moveData.speed * deltaTime);

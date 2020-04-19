@@ -4,6 +4,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using Random = UnityEngine.Random;
 
+// TODO: Stop multiple projectiles from spawning at the same location
 public class ProjectileSpawnSystem : SystemBase
 {
     int maxProjectileSpawn = 4;

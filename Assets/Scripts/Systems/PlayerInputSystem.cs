@@ -23,6 +23,10 @@ public class PlayerInputSystem : SystemBase
                     {
                         moveData.direction.y += 8f; // Amount to add to the direction
                     }
+                    else
+                    {
+                        moveData.direction.y -= 1;
+                    }
                 }
             }).ScheduleParallel();
         }
