@@ -13,11 +13,14 @@ public class MovementSystem : SystemBase
         if (GetSingleton<StateData>().state == StateData.State.Playing)
         {
             float deltaTime = Time.DeltaTime;
-            Entities.ForEach((ref Translation translation, ref MovementData moveData) =>
+            Entities.ForEach((ref MovementData moveData, ref Translation translation) =>
             {
                 if (moveData.isAffectedByGravity)
                 {
-                    moveData.direction.y += moveData.gravityRate * deltaTime;
+                    if (translation.Value.y > 7) // Hardcoded value of Min height
+                    {
+                        moveData.direction.y += moveData.gravityRate * deltaTime;
+                    }
                 }
                 translation.Value += (moveData.direction - translation.Value) * (moveData.speed * deltaTime);
             }).ScheduleParallel();

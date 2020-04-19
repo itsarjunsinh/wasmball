@@ -41,7 +41,7 @@ public class ProjectileSpawnSystem : SystemBase
                         direction = new float3(target.Value.x, target.Value.y, 0),
                         isAffectedByGravity = false,
                         gravityRate = 1,
-                        speed = 2
+                        speed = 3
                     });
                     EntityManager.AddComponentData(projectile, new ProjectileTag { });
                 }
