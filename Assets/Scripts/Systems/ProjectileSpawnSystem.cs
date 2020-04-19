@@ -2,13 +2,13 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using Random = UnityEngine.Random;
 
 // TODO: Stop multiple projectiles from spawning at the same location
 public class ProjectileSpawnSystem : SystemBase
 {
     int maxProjectileSpawn = 3;
     float spawnTimer = 2; // Initial wait time
+    Random random;
     float2[] spawnPoints = new float2[]
     {
         new float2(30, 30), // Top Right
@@ -23,6 +23,7 @@ public class ProjectileSpawnSystem : SystemBase
     {
         RequireSingletonForUpdate<StateData>();
         RequireSingletonForUpdate<ProjectilePrefab>();
+        random = new Random((uint)UnityEngine.Random.Range(1, 300));
     }
 
     protected override void OnUpdate()
@@ -41,8 +42,7 @@ public class ProjectileSpawnSystem : SystemBase
 
                 for (int i = 0; i < maxProjectileSpawn; i++)
                 {
-                    int randomSpawnPoint = Random.Range(0, 6); // Hardcoded length of spawnpoints array
-                    float2 start = spawnPoints[randomSpawnPoint];
+                    float2 start = spawnPoints[random.NextInt(spawnPoints.Length)];
                     float3 target = GetComponent<Translation>(player).Value;
 
                     var projectile = ecb.Instantiate(pfProjectile);

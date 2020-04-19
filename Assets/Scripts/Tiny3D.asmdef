@@ -7,8 +7,7 @@
         "Unity.Transforms",
         "Unity.Tiny.Core",
         "Unity.Tiny.Rendering",
-        "Unity.Tiny.Input",
-        "Unity.Tiny.RendererExtras"
+        "Unity.Tiny.Input"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
