@@ -19,13 +19,13 @@ public class PlayerInputSystem : SystemBase
             {
                 if (isTapped)
                 {
-                    if (translation.Value.y < 29) // Hardcoded value of Max height
+                    if (moveData.direction.y + 8f <=31)
                     {
                         moveData.direction.y += 8f; // Amount to add to the direction
                     }
                     else
                     {
-                        moveData.direction.y -= 1;
+                        moveData.direction.y = 31; // Hardcoded value of Max height
                     }
                 }
             }).ScheduleParallel();

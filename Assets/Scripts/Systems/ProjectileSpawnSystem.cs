@@ -7,8 +7,8 @@ using Random = UnityEngine.Random;
 // TODO: Stop multiple projectiles from spawning at the same location
 public class ProjectileSpawnSystem : SystemBase
 {
-    int maxProjectileSpawn = 4;
-    float spawnTimer = 2; // Initial wait
+    int maxProjectileSpawn = 3;
+    float spawnTimer = 2; // Initial wait time
     float2[] spawnPoints = new float2[]
     {
         new float2(30, 30), // Top Right
