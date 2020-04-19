@@ -22,7 +22,6 @@ public class ProjectileSpawnSystem : SystemBase
     {
         RequireSingletonForUpdate<StateData>();
         RequireSingletonForUpdate<ProjectilePrefab>();
-        Random.InitState(123);
     }
 
     protected override void OnUpdate()
@@ -35,13 +34,16 @@ public class ProjectileSpawnSystem : SystemBase
             if (spawnTimer <= 0f)
             {
                 spawnTimer = 1f;
+                Random.InitState(System.Environment.TickCount);
                 EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.TempJob);
                 Entity pfProjectile = GetSingleton<ProjectilePrefab>().Value;
+                Entity player = GetSingletonEntity<PlayerTag>();
 
                 for (int i = 0; i < maxProjectileSpawn; i++)
                 {
                     int randomSpawnPoint = Random.Range(0, 6); // Hardcoded length of spawnpoints array
                     float2 start = spawnPoints[randomSpawnPoint];
+                    float3 target = GetComponent<Translation>(player).Value;
 
                     var projectile = ecb.Instantiate(pfProjectile);
                     ecb.SetComponent(projectile, new ProjectileTag { });
@@ -51,7 +53,7 @@ public class ProjectileSpawnSystem : SystemBase
                     });
                     ecb.SetComponent(projectile, new MovementData
                     {
-                        direction = new float3(0, 25, 0),
+                        direction = new float3(target.x, target.y, 0),
                         isAffectedByGravity = false,
                         gravityRate = 1,
                         speed = 3
