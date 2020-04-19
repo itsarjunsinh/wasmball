@@ -1,7 +1,7 @@
 using Unity.Entities;
 using Unity.Tiny.Input;
 
-class PlayerInputSystem : SystemBase
+public class PlayerInputSystem : SystemBase
 {
     protected override void OnUpdate()
     {

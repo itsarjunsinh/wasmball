@@ -1,8 +1,10 @@
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 
-class ProjectileSpawnSystem : SystemBase
+public class ProjectileSpawnSystem : SystemBase
 {
     protected override void OnCreate()
     {
@@ -18,19 +20,22 @@ class ProjectileSpawnSystem : SystemBase
             if (turretData.timer <= 0f)
             {
                 turretData.timer = 2f;
-
                 float spawnPositionX = translation.Value.x;
                 float spawnPositionY = translation.Value.y;
 
+                Entity player = GetSingletonEntity<PlayerTag>();
+                Translation target = EntityManager.GetComponentData<Translation>(player);
+
                 Entity pfProjectile = GetSingleton<ProjectilePrefab>().Value;
                 Entity projectile = EntityManager.Instantiate(pfProjectile);
+
                 EntityManager.SetComponentData(projectile, new Translation
                 {
                     Value = new float3(spawnPositionX, spawnPositionY, 0)
                 });
                 EntityManager.SetComponentData(projectile, new MovementData
                 {
-                    direction = new float3(0, 0, 0),
+                    direction = new float3(target.Value.x, target.Value.y, 0),
                     isAffectedByGravity = false,
                     gravityRate = 1,
                     speed = 2
