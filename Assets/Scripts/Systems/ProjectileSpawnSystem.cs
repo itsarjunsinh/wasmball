@@ -29,17 +29,18 @@ public class ProjectileSpawnSystem : SystemBase
                 Entity pfProjectile = GetSingleton<ProjectilePrefab>().Value;
                 Entity projectile = EntityManager.Instantiate(pfProjectile);
 
-                EntityManager.SetComponentData(projectile, new Translation
+                EntityManager.AddComponentData(projectile, new Translation
                 {
                     Value = new float3(spawnPositionX, spawnPositionY, 0)
                 });
-                EntityManager.SetComponentData(projectile, new MovementData
+                EntityManager.AddComponentData(projectile, new MovementData
                 {
                     direction = new float3(target.Value.x, target.Value.y, 0),
                     isAffectedByGravity = false,
                     gravityRate = 1,
                     speed = 2
                 });
+                EntityManager.AddComponentData(projectile, new ProjectileTag { });
             }
         }).WithStructuralChanges().Run();
     }
