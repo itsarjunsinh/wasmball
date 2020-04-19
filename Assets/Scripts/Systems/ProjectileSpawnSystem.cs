@@ -35,7 +35,6 @@ public class ProjectileSpawnSystem : SystemBase
             if (spawnTimer <= 0f)
             {
                 spawnTimer = 1f;
-                Random.InitState(System.Environment.TickCount);
                 EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.TempJob);
                 Entity pfProjectile = GetSingleton<ProjectilePrefab>().Value;
                 Entity player = GetSingletonEntity<PlayerTag>();
