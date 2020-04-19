@@ -1,7 +1,7 @@
+using System;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
-using UnityEngine;
 
 class CollisionSystem : SystemBase
 {
@@ -17,7 +17,7 @@ class CollisionSystem : SystemBase
             EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.TempJob);
             Entities.WithAll<ProjectileTag>().ForEach((ref Entity entity, ref MovementData data, ref Translation translation) =>
             {
-                if ((Mathf.Abs(data.direction.x - translation.Value.x)) <= 0.5)
+                if ((Math.Abs(data.direction.x - translation.Value.x)) <= 0.5)
                 {
                     // TODO : Move player destruction logic to another system.
                     Entity player = GetSingletonEntity<PlayerTag>();
