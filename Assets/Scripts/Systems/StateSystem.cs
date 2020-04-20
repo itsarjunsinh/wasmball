@@ -4,6 +4,7 @@ using Unity.Transforms;
 
 public class StateSystem : SystemBase
 {
+    bool isFirstRun = true;
     bool initalValuesSet = false;
     bool uiHidden = false;
 
@@ -18,9 +19,13 @@ public class StateSystem : SystemBase
         StateData stateData = GetSingleton<StateData>();
         if (stateData.state == StateData.State.WaitingToPlay)
         {
-            if (!initalValuesSet)
+            if (!initalValuesSet && !isFirstRun)
             {
                 // Set inital values
+                Entities.WithAll<UiTag>().ForEach((Entity entity) =>
+                {
+                    EntityManager.RemoveComponent<Disabled>(entity);
+                }).WithStructuralChanges().Run();
                 uiHidden = false;
                 initalValuesSet = true;
             }
@@ -30,7 +35,14 @@ public class StateSystem : SystemBase
             if (!uiHidden)
             {
                 // TODO: Hide UI
+                Entity ui = GetSingletonEntity<UiTag>();
+                EntityManager.AddComponent<Disabled>(ui);
+                Entities.WithAll<UiTag>().ForEach((Entity entity) =>
+                {
+                    EntityManager.AddComponent<Disabled>(entity);
+                }).WithStructuralChanges().Run();
                 uiHidden = true;
+                isFirstRun = false;
             }
         }
         if (stateData.state == StateData.State.Dead)
