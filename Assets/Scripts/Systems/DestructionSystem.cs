@@ -3,8 +3,9 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
 
-class CollisionSystem : SystemBase
+class DestructionSystem : SystemBase
 {
+    bool selfDestructCompleted = false;
     protected override void OnCreate()
     {
         RequireSingletonForUpdate<StateData>();
@@ -12,7 +13,23 @@ class CollisionSystem : SystemBase
     }
     protected override void OnUpdate()
     {
-        if (GetSingleton<StateData>().state == StateData.State.Playing)
+        StateData stateData = GetSingleton<StateData>();
+        if (stateData.state == StateData.State.WaitingToPlay)
+        {
+            if (!selfDestructCompleted)
+            {
+                // Destroy all projectiles
+                EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.TempJob);
+                Entities.WithAll<ProjectileTag>().ForEach((ref Entity entity) =>
+                {
+                    EntityManager.DestroyEntity(entity);
+                }).WithStructuralChanges().Run();
+                ecb.Playback(EntityManager);
+                ecb.Dispose();
+                selfDestructCompleted = true;
+            }
+        }
+        if (stateData.state == StateData.State.Playing)
         {
             EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.TempJob);
             Entities.WithAll<ProjectileTag>().ForEach((ref Entity entity, ref MovementData data, ref Translation translation) =>
@@ -40,10 +57,10 @@ class CollisionSystem : SystemBase
 
                     if (distanceToPlayer <= 0.5)
                     {
-                        StateData stateData = GetSingleton<StateData>();
+                        selfDestructCompleted = false;
                         stateData.state = StateData.State.Dead;
                         SetSingleton(stateData);
-                        ecb.DestroyEntity(player);
+                        //ecb.DestroyEntity(player); - Don't destroy player entity.
                     }
                     else
                     {

@@ -5,6 +5,7 @@ public struct StateData : IComponentData
 {
     public enum State
     {
+        WaitingToPlay,
         Playing,
         Dead
     }
